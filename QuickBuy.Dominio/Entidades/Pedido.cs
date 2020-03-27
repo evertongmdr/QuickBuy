@@ -1,16 +1,19 @@
 ﻿using QuickBuy.Dominio.ObjetoDeValor;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuickBuy.Dominio.Entidades
 {
-   public class Pedido
+   public class Pedido : Entidade
     {
         public int id { get; set; }
 
-        public DateTime DataPedido { get; set; }
+        public DateTime dataPedido { get; set; }
 
         public int usuarioId { get; set; }
+
+        public virtual Usuario usuario { get; set; }
 
         public DateTime dataPrevisaoEntrega { get; set; }
 
@@ -24,8 +27,27 @@ namespace QuickBuy.Dominio.Entidades
         public int numeroEndereco { get; set; }
 
         public int FormaPagamentoId { get; set; }
-        public FormaPagamento formaPagamento { get; set; }
+        public  virtual FormaPagamento formaPagamento { get; set; }
 
-        public ICollection<ItemPedido> itensPedido { get; set; }
+        public virtual ICollection<ItemPedido> itensPedido { get; set; }
+
+        public override void Validate()
+        {
+            LimparMensagensValidacao();
+            if (!itensPedido.Any())
+            {
+                AdicionarCritica("Crítica - Pedido não pode ficar sem item de pedido");
+               
+            }
+
+            if (string.IsNullOrEmpty(cep)) {
+                AdicionarCritica("Crítica - CEP deve estar preenchido");
+            }
+
+            if(FormaPagamentoId == 0) {
+                AdicionarCritica("Crítica - Não foi informado a forma de pagamento");
+            }
+
+        }
     }
 }
