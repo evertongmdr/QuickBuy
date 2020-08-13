@@ -9,6 +9,7 @@ namespace QuickBuy.Dominio.Entidades
         public string senha { get; set; }
         public string nome { get; set; }
         public string sobreNome { get; set;}
+        public bool EhAdministrador { get; set;}
 
 
         /* o motivo de colocar virtual na frente de ICollection  é que

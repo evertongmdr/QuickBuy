@@ -88,7 +88,10 @@ namespace QuickBuy.Repositorio.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<decimal>("preco");
+                    b.Property<string>("nomeArquivo");
+
+                    b.Property<decimal>("preco")
+                        .HasColumnType("decimal(19,4)");
 
                     b.HasKey("id");
 
@@ -99,6 +102,8 @@ namespace QuickBuy.Repositorio.Migrations
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("EhAdministrador");
 
                     b.Property<string>("email")
                         .IsRequired()

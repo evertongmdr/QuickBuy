@@ -36,7 +36,8 @@ public usuario;
           
           this.usuarioServico.usuario = usuario_json;
 
-          console.log("oi", this.usuario);
+          console.log(usuario_json);
+         
           if (this.returnUrl == null) {
             this.router.navigate(['/']);
           } else {
@@ -46,7 +47,9 @@ public usuario;
          
           
         }, err => {
+         
           this.mensagem = err.error;
+          console.log(err.error);
           this.ativar_spinner = false;
         }
       );

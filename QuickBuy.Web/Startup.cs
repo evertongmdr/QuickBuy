@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -26,7 +27,18 @@ namespace QuickBuy.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            /*permite acessar o contexto da requisiçã.
+              Então toda vez que o sistema foi acessado e tiver uma requesião da WEB API
+              vai ser aberto uma sessão com servidor e também um contexto da requisição.
+              
+             Logo toda requisição vai ter um contexto.*/
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                /*Configurando o ASP.NET core para quando retornar estruturas em JSON para ele
+                 ignorar referências em Loop*/
+                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             var connectionString = Configuration.GetConnectionString("QuickBuyDB");
 
             /* permite carregar as entidades de forma automatica no banco, ou seja em tempo de execução */
@@ -38,6 +50,7 @@ namespace QuickBuy.Web
             //  injeções de depedencias igual no angular onde você vai no modulo e declara aquele tipo de injeção de dependecia.
             services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
             services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+            services.AddScoped<IPedidoRepositorio, PedidoRepositorio>();
 
 
             // In production, the Angular files will be served from this directory

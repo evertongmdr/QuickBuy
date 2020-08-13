@@ -17,5 +17,10 @@ namespace QuickBuy.Repositorio.Repositorios
             // trnasforma essa função lambda em sql 
             return QuickBuyContexto.Usuarios.FirstOrDefault(u => u.email == email && u.senha == senha);
         }
+
+        public Usuario Obter(string email)
+        {
+            return QuickBuyContexto.Usuarios.FirstOrDefault(u => u.email == email);
+        }
     }
 }

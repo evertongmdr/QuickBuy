@@ -38,6 +38,10 @@ export class UsuarioServico {
     return this._usuario != null && this._usuario.email != "" && this._usuario.senha != "";
   }
 
+  public usuario_administrador(): boolean {
+    return this.usuario_autenticado() && this.usuario.ehAdministrador;
+  }
+
   public limpar_sessao() {
     sessionStorage.setItem("usuario-autenticado", "");
     this._usuario = null;
@@ -56,7 +60,17 @@ export class UsuarioServico {
 
     //this.baseUrl = raiz do site qeu pode ser exemplo.: www.quickbuy.com
 
-    return this.http.post<Usuario>(this.baseUrl + "api/usuario/VerificarUsuario", body, {});
+    return this.http.post<Usuario>(this.baseUrl + "api/usuario/VerificarUsuario", body, {headers});
+
+  }
+
+  get headers(): HttpHeaders {
+    return  new HttpHeaders().set('content-type', 'application/json');
+  }
+
+  public cadastarUsuario(usuario: Usuario): Observable<Usuario> {
+
+    return this.http.post<Usuario>(this.baseUrl + "api/usuario", JSON.stringify(usuario), { headers: this.headers });
 
   }
 }
